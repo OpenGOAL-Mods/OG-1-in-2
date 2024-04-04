@@ -20,7 +20,8 @@
 
 #include "game/common/game_common_types.h"
 #include "graphics/gfx_test.h"
-
+//hide and seek hack
+#include "multiplayer.h"
 #include "third-party/CLI11.hpp"
 
 #ifdef _WIN32
@@ -88,6 +89,10 @@ std::string game_arg_documentation() {
  */
 int main(int argc, char** argv) {
   ArgumentGuard u8_guard(argc, argv);
+
+    read_username_from_file(username);
+  std::cout << "Username: " << username << std::endl;
+  //set_multiplayer_from_json();
 
   // CLI flags
   bool show_version = false;

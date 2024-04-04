@@ -20,7 +20,7 @@
 using json = nlohmann::json;
 
 //std::string ipAddressOrHostname = "78.108.218.126:25560";
-std::string ipAddressOrHostname = "127.0.0.1:25560";
+std::string ipAddressOrHostname = "localhost:25560";
 char username[101];
 
 void read_username_from_file(char* username) {

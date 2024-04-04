@@ -44,6 +44,7 @@
 #include "game/sce/sif_ee.h"
 #include "game/sce/stubs.h"
 #include "game/system/vm/vm.h"
+#include "game/multiplayer.h"
 
 using namespace ee;
 
@@ -556,6 +557,14 @@ void InitMachine_PCPort() {
   make_function_symbol_from_c("__pc-set-levels", (void*)pc_set_levels);
 
   make_function_symbol_from_c("pc-discord-rpc-update", (void*)update_discord_rpc);
+
+  // HTTP server stuff
+  make_function_symbol_from_c("pc-http-register", (void*)http_register);
+  make_function_symbol_from_c("pc-http-update", (void*)http_update);
+  make_function_symbol_from_c("pc-http-update-settings", (void*)http_update_settings);
+  make_function_symbol_from_c("pc-http-mark-found", (void*)http_mark_found);
+  make_function_symbol_from_c("pc-http-get", (void*)http_get);
+
 
   // setup string constants
   // TODO - these may be able to be moved into `init_common_pc_port_functions` but it's trickier
