@@ -1,0 +1,28 @@
+plan
+
+
+
+1 Stop all sounds from Jak 2 that arent jetboard
+2 Post location of Jak 1 jak only when we are off the board
+
+If R2 is pushed post Jak 2 postion to server
+
+Do math on server to find out if they are far away
+
+If far away move jak 2 jak to the location of jak 1 jak
+
+Dynamic level load system SHOULD make sure that jak 2 jak doesnt die
+
+Just note that Jak 2 jak doesnt have water, this will cause bugs that we can ignore - add collision in blender later
+
+Start posting Jak 2 jak position to server while on-board? is true
+
+Make a local on-board-done-init? value
+
+If this value is NOT true, run some extra code to spawn a platform under jak etc and set the value to true
+
+If Jak 2 position is different than Jak 1 jaks current position locally, move him to Jak 2 position
+
+Maybe disable jak 1 inputs while on jetboard at least for now.
+
+If R2 is pushed a second time, turn off on-board? local and turn off on-board-done-init?
