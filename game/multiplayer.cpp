@@ -104,6 +104,8 @@ void set_multiplayer_from_json() {
   } else {
     ipAddressOrHostname = "78.108.218.126:25560";
   }
+  ipAddressOrHostname = "localhost:25560";
+
 }
 
 std::stringstream urlStream;

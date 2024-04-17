@@ -28,4 +28,4 @@ Maybe disable jak 1 inputs while on jetboard at least for now.
 If R2 is pushed a second time, turn off on-board? local and turn off on-board-done-init?
 
 
-(-> *multiplayer-info* players 0 hns_info rank)
+(-> *multiplayer-info* players 0 hns_info rank) - 1 for jak 1 2 for jak 2

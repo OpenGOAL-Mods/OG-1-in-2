@@ -20,11 +20,58 @@ an orb |#
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Begin function defintions.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(define *done-null-setup* #f)
 (define *sync-random-level-mode* #f)
 (define *show-player-list?* #t)
 
 (defun runs-every-frame ()
+
+  (when (and (!= *target* #f) (!= (-> (level-get-target-inside *level*) name) 'title) (> (-> *game-info* money) 0.0))
+
+
+  (set-up-remote-if-null)
+  (when (and  *done-null-setup* (!= (-> *target* state name) 'target-continue) *target* (not *registered-with-server?*) (-> *self-player-info* username) (not (string= (-> *self-player-info* username) "")))
+
+    (pc-http-register *multiplayer-info* *self-player-info*)
+    (set! *registered-with-server?* #t)
+    ;; wait a bit to ensure registration before syncing position
+    (set! *last-position-sync-time* (+ (-> *display* base-frame-counter) (seconds 3.0)))
+    )
+
+
+
+
+  ;; if never synced positions, or its been X ms, request updated positions
+    (when (and (>= (-> *multiplayer-info* player_num) 0)
+               (or (not *last-position-sync-time*)
+                   (>= (- (-> *display* base-frame-counter) *last-position-sync-time*) (seconds 0.05))
+                   )
+               )
+      ;; update last sync time
+      (set! *last-position-sync-time* (-> *display* base-frame-counter))
+
+      ;; update this player's position and send to server
+      (update-multiplayer-info)
+
+      ;; if first time, we need to change our state from invalid to lobby
+      ;; this is also sort of like an "ack" back to the server to count you as fully joined
+      (if (= (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-invalid))
+        (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-lobby))
+        )
+
+      ;; send updated player info to server
+      (pc-http-update)
+
+      ;; request to get positions of other players from server (async)
+      (pc-http-get)
+      )
+
+    ;; (spawn-multiple-targets)
+
+    ;; ;; color ourselves
+    ;; (color-target *target* (-> *self-player-info* color)) ;; otherwise use player's choice
+
+  )
 
 
 (when #f
@@ -46,6 +93,12 @@ an orb |#
     (set! *last-position-sync-time* (+ (-> *display* base-frame-counter) (seconds 3.0)))
     )
 
+
+
+
+
+
+;; leave but could remove
   (when (and *target* (>= (-> *multiplayer-info* player_num) 0) (< (-> *multiplayer-info* player_num) MAX_MULTIPLAYER_COUNT))
     (when (!= (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-invalid))
 
@@ -59,11 +112,8 @@ an orb |#
         (case (-> *multiplayer-info* state)
           (((mp-game-state mp-game-lobby))
             ;; jump to lobby if game is in lobby state and we're not already there
-            (when (not (string= (-> *game-info* current-continue name) *lobby-continue-point*))
-              (reset-player-to-lobby)
-              )
+            ;; we are ALWAYS in lobby for jetboard mode
 
-            (set! *sync-random-level-mode* #f)
 
             ;; set to lobby state if not lobby/ready/start
             (when (and (!= (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-lobby))
@@ -303,35 +353,7 @@ an orb |#
         )
       )
 
-    ;; if never synced positions, or its been X ms, request updated positions
-    (when (and (>= (-> *multiplayer-info* player_num) 0)
-               (or (not *last-position-sync-time*)
-                   (>= (- (-> *display* base-frame-counter) *last-position-sync-time*) (seconds 0.05))
-                   )
-               )
-      ;; update last sync time
-      (set! *last-position-sync-time* (-> *display* base-frame-counter))
 
-      ;; update this player's position and send to server
-      (update-multiplayer-info)
-
-      ;; if first time, we need to change our state from invalid to lobby
-      ;; this is also sort of like an "ack" back to the server to count you as fully joined
-      (if (= (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-invalid))
-        (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-lobby))
-        )
-
-      ;; send updated player info to server
-      (pc-http-update)
-
-      ;; request to get positions of other players from server (async)
-      (pc-http-get)
-      )
-
-    (spawn-multiple-targets)
-
-    ;; color ourselves
-    (color-target *target* (-> *self-player-info* color)) ;; otherwise use player's choice
     )
     )
 
