@@ -252,39 +252,33 @@ class RequestHandler(BaseHTTPRequestHandler):
           self.wfile.write(b"Your IP address has been banned.")
           self.wfile.flush()
         else:
-          if username[0] == "ZED_JAK1":
-            # existing user, treat as rejoin
-            player_num = 3
-          if username[0] == "ZED_JAK2":
-            # existing user, treat as rejoin
-            player_num = 2
-          else:
-            # new user
-            player_num = len(PLAYER_LIST)  # TODO: loop to find next open slot (after dropping players)
-            PLAYER_IDX_LOOKUP[username[0]] = player_num
+          # new user
+          player_num = len(PLAYER_LIST)  # TODO: loop to find next open slot (after dropping players)
+          PLAYER_IDX_LOOKUP[username[0]] = player_num
 
-            # fill out empty keys
-            player_info = copy.deepcopy(DEFAULT_PLAYER_INFO)
-            player_info["mp_state"] = MpTargetState.LOBBY.value
-            player_info["last_update"] = time.time()
-            PLAYER_LIST.append(player_info)
+          # fill out empty keys
+          player_info = copy.deepcopy(DEFAULT_PLAYER_INFO)
+          player_info["mp_state"] = MpTargetState.LOBBY.value
+          player_info["last_update"] = time.time()
+          PLAYER_LIST.append(player_info)
 
-          determine_admin_player()
+        determine_admin_player()
 
-          self.send_response(200)
-          self.send_header('Content-type', 'application/json')
-          self.end_headers()
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json')
+        self.end_headers()
 
-          response_data = {
-            "game_state": MP_INFO["state"],
-            "player_num": player_num,
-            "is_admin": PLAYER_LIST[player_num]["is_admin"]
-          }
 
-          json_data = json.dumps(response_data)
-          # Write JSON data to the response body
-          self.wfile.write(json_data.encode())
-          self.wfile.flush()
+        response_data = {
+          "game_state": MP_INFO["state"],
+          "player_num": player_num,
+          "is_admin": PLAYER_LIST[player_num]["is_admin"]
+        }
+
+        json_data = json.dumps(response_data)
+        # Write JSON data to the response body
+        self.wfile.write(json_data.encode())
+        self.wfile.flush()
 
       # update (player updating themselves)
       case "/update":
@@ -412,13 +406,13 @@ def game_loop():
         # dont count this player as joined
         continue
 
-      if "last_update" in PLAYER_LIST[i] and PLAYER_LIST[i]["last_update"] > 0 and time.time() - PLAYER_LIST[i]["last_update"] >= PLAYER_DISCONNECT_TIMEOUT:
-        print(f"player {i} hasn't updated in {PLAYER_DISCONNECT_TIMEOUT}s, removing them")
-        # havent heard from player in too long, kick them out
-        if "username" in PLAYER_LIST[i] and PLAYER_LIST[i]["username"] in PLAYER_IDX_LOOKUP:
-          PLAYER_IDX_LOOKUP.pop(PLAYER_LIST[i]["username"])
-        PLAYER_LIST[i] = copy.deepcopy(DEFAULT_PLAYER_INFO)
-        continue
+      # if "last_update" in PLAYER_LIST[i] and PLAYER_LIST[i]["last_update"] > 0 and time.time() - PLAYER_LIST[i]["last_update"] >= PLAYER_DISCONNECT_TIMEOUT:
+      #   print(f"player {i} hasn't updated in {PLAYER_DISCONNECT_TIMEOUT}s, removing them")
+      #   # havent heard from player in too long, kick them out
+      #   if "username" in PLAYER_LIST[i] and PLAYER_LIST[i]["username"] in PLAYER_IDX_LOOKUP:
+      #     PLAYER_IDX_LOOKUP.pop(PLAYER_LIST[i]["username"])
+      #   PLAYER_LIST[i] = copy.deepcopy(DEFAULT_PLAYER_INFO)
+      #   continue
 
       total_players += 1
       state = MpTargetState(PLAYER_LIST[i]["mp_state"])

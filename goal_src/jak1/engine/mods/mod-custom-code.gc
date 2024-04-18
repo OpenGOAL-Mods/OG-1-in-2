@@ -24,7 +24,63 @@ an orb |#
 (define *sync-random-level-mode* #f)
 (define *show-player-list?* #t)
 
+
+
+
+
+(-> *multiplayer-info* players 0 hns_info rank)
+
+(defun get-jak-2-y ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 2)
+(return (-> *multiplayer-info* players i trans_y))
+)
+)
+0.0
+)
+
+(defun get-jak-2-x ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 2)
+(return (-> *multiplayer-info* players i trans_x))
+)
+)
+0.0
+)
+
+(defun get-jak-2-z ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 2)
+(return (-> *multiplayer-info* players i trans_z))
+)
+)
+0.0
+)
+
 (defun runs-every-frame ()
+
+(if (!= (get-jak-2-x) 0.0)
+(begin
+(set! (-> *target* root trans x) (get-jak-2-x))
+(set! (-> *target* root trans y) (get-jak-2-y))
+(set! (-> *target* root trans z) (get-jak-2-z))
+)
+)
+  (let ((s5-0 (new-stack-vector0))
+        (s4-0 (new-stack-vector0))
+        )
+
+        (set! (-> s5-0  y)(get-jak-2-y))
+        (set! (-> s5-0  x)(get-jak-2-x))
+        (set! (-> s5-0  z)(get-jak-2-z))
+(add-debug-sphere #t (bucket-id debug) s5-0 (meters 2.0) (static-rgba 0 #xff 0 #x40))
+  )
 
   (when (and (!= *target* #f) (!= (-> (level-get-target-inside *level*) name) 'title) (> (-> *game-info* money) 0.0))
 

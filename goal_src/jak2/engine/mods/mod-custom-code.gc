@@ -38,12 +38,12 @@
           )
         )
   )
-  
+
 (define *closest-sphere-pos-global* (new 'static 'vector :x (meters   -5143243243248.5894) :y (meters     -25435435435.2520) :z (meters   -55435435345487.5171)))
 (define *wanted-level* 'NA)
 
 
-(define *beach-spots* (new 'static 'boxed-array :type vector 
+(define *beach-spots* (new 'static 'boxed-array :type vector
 (new 'static 'vector :x (meters   -518.5894) :y (meters     -2.2520) :z (meters   -587.5171))
 (new 'static 'vector :x (meters   -517.3105) :y (meters     72.6228) :z (meters   -586.3430))
 (new 'static 'vector :x (meters   -436.6849) :y (meters     -2.5174) :z (meters   -446.1119))
@@ -160,7 +160,7 @@
 
 ))
 
-(define *firecanyon-spots* (new 'static 'boxed-array :type vector 
+(define *firecanyon-spots* (new 'static 'boxed-array :type vector
 (new 'static 'vector :x (meters    -13.8207) :y (meters      6.0457) :z (meters    -93.5404))
 (new 'static 'vector :x (meters     -4.9223) :y (meters     19.1562) :z (meters   -106.5609))
 (new 'static 'vector :x (meters    -60.8102) :y (meters     32.5038) :z (meters   -124.6014))
@@ -279,16 +279,16 @@
 (new 'static 'vector :x (meters    221.7904) :y (meters     37.4056) :z (meters   -893.0056))
 (new 'static 'vector :x (meters    165.8321) :y (meters     32.5640) :z (meters   -926.6889))
 ))
-(define *training-spots* (new 'static 'boxed-array :type vector 
+(define *training-spots* (new 'static 'boxed-array :type vector
 (new 'static 'vector :x (meters  -1317.6112) :y (meters      6.9499) :z (meters   1065.5915))
 ))
 
-(define *misty-spots* (new 'static 'boxed-array :type vector 
+(define *misty-spots* (new 'static 'boxed-array :type vector
 (new 'static 'vector :x (meters     39.4536) :y (meters      3.6524) :z (meters    826.8192))
 ))
 
 
-(define *jungle-spots* (new 'static 'boxed-array :type vector 
+(define *jungle-spots* (new 'static 'boxed-array :type vector
 (new 'static 'vector :x (meters    162.1731) :y (meters      1.2968) :z (meters   -147.2938))
 (new 'static 'vector :x (meters    176.4970) :y (meters      1.8095) :z (meters   -101.1030))
 (new 'static 'vector :x (meters    191.5196) :y (meters      2.2257) :z (meters    -48.7668))
@@ -330,29 +330,29 @@
 
 
 (defun draw-spheres ()
-  
+
   (dotimes (i (length *beach-spots*))
   (add-debug-sphere #t (bucket-id debug-no-zbuf1) (-> *beach-spots* i) (meters 1.2) *color-dark-yellow*)
-  
+
   )
 
     (dotimes (i (length *firecanyon-spots*))
   (add-debug-sphere #t (bucket-id debug-no-zbuf1) (-> *firecanyon-spots* i) (meters 1.2) *color-dark-red*)
-  
+
   )
 
     (dotimes (i (length *jungle-spots*))
   (add-debug-sphere #t (bucket-id debug-no-zbuf1) (-> *jungle-spots* i) (meters 1.2) *color-light-green*)
-  
+
   )
-  
+
   (none))
 
 
 (defun find-closest-sphere-jak ()
 
   (dotimes (i (length *beach-spots*))
-  
+
   (when (> (vector-vector-xz-distance (-> *target* root trans) *closest-sphere-pos-global*) (vector-vector-xz-distance (-> *target* root trans) (-> *beach-spots* i)))
   (set! *closest-sphere-pos-global* (-> *beach-spots* i))
   (set! *wanted-level* 'beach)
@@ -362,7 +362,7 @@
   )
 
   (dotimes (i (length *firecanyon-spots*))
-  
+
   (when (> (vector-vector-xz-distance (-> *target* root trans) *closest-sphere-pos-global*) (vector-vector-xz-distance (-> *target* root trans) (-> *firecanyon-spots* i)))
   (set! *closest-sphere-pos-global* (-> *firecanyon-spots* i))
   (set! *wanted-level* 'firecanyon)
@@ -372,7 +372,7 @@
   )
 
   (dotimes (i (length *jungle-spots*))
-  
+
   (when (> (vector-vector-xz-distance (-> *target* root trans) *closest-sphere-pos-global*) (vector-vector-xz-distance (-> *target* root trans) (-> *jungle-spots* i)))
   (set! *closest-sphere-pos-global* (-> *jungle-spots* i))
   (set! *wanted-level* 'jungle)
@@ -382,7 +382,7 @@
   )
 
     (dotimes (i (length *training-spots*))
-  
+
   (when (> (vector-vector-xz-distance (-> *target* root trans) *closest-sphere-pos-global*) (vector-vector-xz-distance (-> *target* root trans) (-> *training-spots* i)))
   (set! *closest-sphere-pos-global* (-> *training-spots* i))
   (set! *wanted-level* 'training)
@@ -392,7 +392,7 @@
   )
 
       (dotimes (i (length *misty-spots*))
-  
+
   (when (> (vector-vector-xz-distance (-> *target* root trans) *closest-sphere-pos-global*) (vector-vector-xz-distance (-> *target* root trans) (-> *misty-spots* i)))
   (set! *closest-sphere-pos-global* (-> *misty-spots* i))
   (set! *wanted-level* 'misty)
@@ -473,7 +473,56 @@
 
     (defun runs-every-frame ()
       ;; (increase-power-cell-by-one) This is a call to increase-power-cell-by-one defined in mod-common-functions.gc
-    
+
+
+  (when (and (!= *target* #f) (!= (-> (level-get-target-inside *level*) name) 'title) (> (-> *game-info* skill) 0.0))
+
+
+  (set-up-remote-if-null)
+  (when (and (!= (-> *target* state name) 'target-continue) *target* (not *registered-with-server?*) (-> *self-player-info* username) (not (string= (-> *self-player-info* username) "")))
+
+    (pc-http-register *multiplayer-info* *self-player-info*)
+    (set! *registered-with-server?* #t)
+    ;; wait a bit to ensure registration before syncing position
+    (set! *last-position-sync-time* (+ (current-time) (seconds 3.0)))
+    )
+
+
+
+
+  ;; if never synced positions, or its been X ms, request updated positions
+    (when (and (>= (-> *multiplayer-info* player_num) 0)
+               (or (not *last-position-sync-time*)
+                   (>= (- (current-time) *last-position-sync-time*) (seconds 0.05))
+                   )
+               )
+      ;; update last sync time
+      (set! *last-position-sync-time* (current-time))
+
+      ;; update this player's position and send to server
+      (update-multiplayer-info)
+
+      ;; if first time, we need to change our state from invalid to lobby
+      ;; this is also sort of like an "ack" back to the server to count you as fully joined
+      (if (= (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-invalid))
+        (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-lobby))
+        )
+
+      ;; send updated player info to server
+      (pc-http-update)
+
+      ;; request to get positions of other players from server (async)
+      (pc-http-get)
+      )
+
+    ;; (spawn-multiple-targets)
+
+    ;; ;; color ourselves
+    ;; (color-target *target* (-> *self-player-info* color)) ;; otherwise use player's choice
+
+  )
+
+
 
 
     (if (!= old-level *wanted-level*)
@@ -482,24 +531,24 @@
 
     (when *target*
     (if *wanted-level*
-     (set! old-level *wanted-level*) 
-     
+     (set! old-level *wanted-level*)
+
     )
     )
-    
-    
+
+
     (when *target*
         (find-closest-sphere-jak)
     )
 
     (when *target*
     (load-level-from-symbol)
-    
+
     )
-    
+
      ;; (draw-spheres)
       ;; Sample code to turn jak pink whenever he's doing the jetboard hover glitch
-      ;; (when *target* 
+      ;; (when *target*
       ;;   (if (board-hovering?)
       ;;     (draw-pink *target*)
       ;;     (draw-normal *target*)
@@ -508,15 +557,15 @@
 
       (when (and (cpad-pressed? 0 down) (= *master-mode* 'game))
       (format #t "(new 'static 'vector :x (meters~F) :y (meters~F) :z (meters~F))~%" (/ (-> *target* root trans x) 4096.0) (/ (-> *target* root trans y) 4096.0)(/ (-> *target* root trans z) 4096.0))
-      
+
       )
 
 
-      (if *show-input-display* 
+      (if *show-input-display*
         (input-display-on)
         (input-display-off)
         )
-      
+
       (none)
       )
 
@@ -527,7 +576,7 @@
       )
 
     (defun runs-on-task-close ()
-    
+
 
       (none)
       )
@@ -537,25 +586,25 @@
         ;; Code here runs as soon as you pickup ANY eco
 
         (case eco-type
-          (((pickup-type eco-yellow))      
+          (((pickup-type eco-yellow))
             ;; Code here runs as soon as you pickup yellow eco
 
             )
-          (((pickup-type eco-red))      
+          (((pickup-type eco-red))
             ;; Code here runs as soon as you pickup red eco
 
             )
-          (((pickup-type eco-blue))      
+          (((pickup-type eco-blue))
             ;; Code here runs as soon as you pickup blue eco
 
             )
 
-          (((pickup-type eco-green))      
-            ;; Code here runs as soon as you pickup big green eco 
+          (((pickup-type eco-green))
+            ;; Code here runs as soon as you pickup big green eco
 
             )
           )
-        
+
         (when from-vent?
           ;; Code here runs only if the eco was picked up from a vent
 
@@ -566,7 +615,7 @@
       )
 
     (defun runs-on-jak-spawn ()
-      ;; Code here runs every time jak spawns (loading a file new game or death)   
+      ;; Code here runs every time jak spawns (loading a file new game or death)
         (process-spawn-function process music-manager-proc)
       (none)
       )
@@ -575,14 +624,14 @@
       (case death-event
         (('dying)
           ;; Code here runs immediately every time jak dies, before any death animation or death cutscene
-          
+
           )
         (('blackout)
           ;; Code here runs after jak dies (and any death cutscene finishes), during the blackout before he spawns
 
           )
         )
-      
+
       (none)
       )
 

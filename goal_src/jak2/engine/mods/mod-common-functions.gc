@@ -39,11 +39,58 @@ if the result of rand-vu-int-range is 1, then DANCE! if it is not 1, then Don't 
 
 (define *target-board-hold-tricks* 0) ;; used to detect if player is doing a jetboard hover (see board-states.gc)
 
+
+
+(define *multiplayer-info* (new 'global 'multiplayer-info))
+(define *remote-targets* (new 'global 'boxed-array handle MAX_MULTIPLAYER_COUNT))
+
+(define *self-player-info* (the-as remote-player-info #f))
+(define *game-state-change-time* (the-as time-frame #f))
+(define *last-game-state* (mp-game-state mp-game-invalid))
+
+(define *registered-with-server?* #f)
+(define *last-position-sync-time* (the-as time-frame #f))
+
+
+(define *lobby-continue-point* "spyro2-autumnplains-start")
+(define *hider-continue-point* "village2-start")
+(define *seeker-continue-point* "village2-dock")
+
+(define *local_username* "ZED_JAK2")
+
+(defun-extern gmenu-1 none)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Define Custom Functions to call in mods
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; add your own unique custom functions here!
+
+
+(defun set-up-remote-if-null ()
+  (when (not *self-player-info*)
+    (set! *self-player-info* (new 'global 'remote-player-info))
+    (set! (-> *self-player-info* username) *local_username*) ;; TODO - pull this from settings I guess?
+   ;; nah (set! (-> *self-player-info* color)  (-> *pc-settings* tgt-color)) ;; TODO - pull this from settings I guess?
+
+    )
+  (none)
+  )
+
+(defun update-multiplayer-info()
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) username)   (-> *self-player-info* username))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) color)      (-> *self-player-info* color))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) trans_x)    (-> *target* root trans x))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) trans_y)    (-> *target* root trans y))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) trans_z)    (-> *target* root trans z))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) quat_x)     (-> *target* root quat x))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) quat_y)     (-> *target* root quat y))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) quat_z)     (-> *target* root quat z))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) quat_w)     (-> *target* root quat w))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) tgt_state)  (-> *target* state name))
+  (none)
+  )
 
 ;; Macros can be used more-or-less just like functions
 (defmacro current-cell-count ()
