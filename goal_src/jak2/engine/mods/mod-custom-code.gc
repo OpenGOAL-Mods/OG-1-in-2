@@ -471,11 +471,194 @@
 
 (define old-level #f)
 
+
+
+(define *vector-LOL* (new 'static 'vector :x (meters   -518.5894) :y (meters     -2.2520) :z (meters   -587.5171) :w (meters 0.302)))
+
+(define *cam-vector-LOL* (new 'static 'vector :x (meters   -518.5894) :y (meters     -2.2520) :z (meters   -587.5171)))
+
+
+
+(-> *multiplayer-info* players 0 hns_info rank)
+
+(defun get-jak-1-cam-y ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i quat_y))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-x ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i quat_x))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-z ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i quat_z))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-w ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i quat_w))
+)
+)
+0.0
+)
+
+
+
+(-> *multiplayer-info* players 0 hns_info rank)
+
+(defun get-jak-1-y ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i trans_y))
+)
+)
+0.0
+)
+
+(defun get-jak-1-x ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i trans_x))
+)
+)
+0.0
+)
+
+(defun get-jak-1-z ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i trans_z))
+)
+)
+0.0
+)
+
+
+
+(defun get-jak-1-cam-trans-y ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_trans_y))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-trans-x ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_trans_x))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-trans-z ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_trans_z))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-trans-w ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_trans_w))
+)
+)
+0.0
+)
+
+
+(defun stupid ()
+
+(process-spawn-function process
+  (lambda :behavior process ()
+
+  (let ((s5-0 (new-stack-vector0))
+        (s4-0 (new-stack-vector0))
+        )
+
+        (set! (-> *vector-LOL* y)(get-jak-1-cam-trans-y))
+        (set! (-> *vector-LOL* x)(get-jak-1-cam-trans-x))
+        (set! (-> *vector-LOL*  z)(get-jak-1-cam-trans-z))
+        (set! (-> *vector-LOL*  w)(* (get-jak-1-cam-trans-w) -1.0))
+
+        (set! (-> *cam-vector-LOL* y)(get-jak-1-cam-y))
+        (set! (-> *cam-vector-LOL* x)(get-jak-1-cam-x))
+        (set! (-> *cam-vector-LOL*  z)(get-jak-1-cam-z))
+
+
+       ;;(set-vector! (-> *target* control trans) x y z 1.0)
+       ;;(vector-copy! (-> *target* control transv) *zero-vector*)
+      ;; (quaternion-identity! (-> *target* control quat))
+      ;; (quaternion-identity! (-> *target* control quat-for-control))
+      ;; (quaternion-identity! (-> *target* control dir-targ))
+      (let ((tq (new 'stack 'transformq)))
+        (vector-copy! (-> tq trans) *vector-LOL*)
+        (quaternion-identity! (-> tq quat))
+        (quaternion-copy! (-> tq quat) (the-as quaternion *cam-vector-LOL*))
+        (vector-identity! (-> tq scale))
+        (suspend)
+        (send-event *camera* 'teleport-to-transformq tq)
+        )
+
+    (deactivate self)
+    )
+
+  )
+  )
+
+
+(none))
+
+(define no-board? #t)
     (defun runs-every-frame ()
+
+
       ;; (increase-power-cell-by-one) This is a call to increase-power-cell-by-one defined in mod-common-functions.gc
 
 
-  (when (and (!= *target* #f) (!= (-> (level-get-target-inside *level*) name) 'title) (> (-> *game-info* skill) 0.0))
+  (when (and (!= *target* #f) (!= (-> (level-get-target-inside *level*) name) 'title)) ;;(> (-> *game-info* skill) 0.0))
 
 
   (set-up-remote-if-null)
@@ -554,6 +737,18 @@
       ;;     (draw-normal *target*)
       ;;     )
       ;;   )
+
+      (when no-board?
+        (send-event *target* 'get-pickup (pickup-type board) 100.0)
+        (set! no-board? #f)
+      )
+
+  (when (and (!= *target* #f) (!= (-> (level-get-target-inside *level*) name) 'title) )
+
+       (stupid)
+       (none)
+       )
+
 
       (when (and (cpad-pressed? 0 down) (= *master-mode* 'game))
       (format #t "(new 'static 'vector :x (meters~F) :y (meters~F) :z (meters~F))~%" (/ (-> *target* root trans x) 4096.0) (/ (-> *target* root trans y) 4096.0)(/ (-> *target* root trans z) 4096.0))

@@ -222,6 +222,10 @@ void http_update() {
       {"quat_z", rpInfo->quat_z},
       {"quat_w", rpInfo->quat_w},
       {"tgt_state", rpInfo->tgt_state},
+      {"cam_trans_x", rpInfo->cam_trans_x},
+      {"cam_trans_y", rpInfo->cam_trans_y},
+      {"cam_trans_z", rpInfo->cam_trans_z},
+      {"cam_trans_w", rpInfo->cam_trans_w},
       // role intentionally left out, only updated from server side
       // collected_by_pnum intentionally left out, only updated from server side
       // rank intentionally left out, only updated from server side
@@ -277,42 +281,51 @@ void http_get() {
         if (pNum < MAX_MULTIPLAYER_COUNT) {
           RemotePlayerInfo* rpInfo = &(gMultiplayerInfo->players[pNum]);
 
-          for (const auto& field : item.value().items()) {
-            if (field.key().compare("username") == 0) {
-              // str copy username into struct
-              std::string uname = field.value();
-              strncpy(Ptr<String>(rpInfo->username).c()->data(), uname.c_str(), MAX_USERNAME_LEN);
-            } else if (field.key().compare("color") == 0) {
-              rpInfo->color = field.value();
-            } else if (field.key().compare("is_admin") == 0) {
-              rpInfo->is_admin = field.value();
-            } else if (field.key().compare("trans_x") == 0) {
-              rpInfo->trans_x = field.value();
-            } else if (field.key().compare("trans_y") == 0) {
-              rpInfo->trans_y = field.value();
-            } else if (field.key().compare("trans_z") == 0) {
-              rpInfo->trans_z = field.value();
-            } else if (field.key().compare("quat_x") == 0) {
-              rpInfo->quat_x = field.value();
-            } else if (field.key().compare("quat_y") == 0) {
-              rpInfo->quat_y = field.value();
-            } else if (field.key().compare("quat_z") == 0) {
-              rpInfo->quat_z = field.value();
-            } else if (field.key().compare("quat_w") == 0) {
-              rpInfo->quat_w = field.value();
-            } else if (field.key().compare("tgt_state") == 0) {
-              rpInfo->tgt_state = field.value();
-            } else if (field.key().compare("role") == 0) {
-              rpInfo->hns_info.role = field.value();
-            } else if (field.key().compare("mp_state") == 0
-              && pNum != gMultiplayerInfo->player_num) { // only sync mp_state for remotes. for our own target, only goal code should be updating this
-              rpInfo->hns_info.mp_state = field.value();
-            } else if (field.key().compare("collected_by_pnum") == 0) {
-              rpInfo->hns_info.collected_by_pnum = field.value();
-            } else if (field.key().compare("rank") == 0) {
-              rpInfo->hns_info.rank = field.value();
-            }
-          }
+for (const auto& field : item.value().items()) {
+    if (field.key().compare("username") == 0) {
+        // str copy username into struct
+        std::string uname = field.value();
+        strncpy(Ptr<String>(rpInfo->username).c()->data(), uname.c_str(), MAX_USERNAME_LEN);
+    } else if (field.key().compare("color") == 0) {
+        rpInfo->color = field.value();
+    } else if (field.key().compare("is_admin") == 0) {
+        rpInfo->is_admin = field.value();
+    } else if (field.key().compare("trans_x") == 0) {
+        rpInfo->trans_x = field.value();
+    } else if (field.key().compare("trans_y") == 0) {
+        rpInfo->trans_y = field.value();
+    } else if (field.key().compare("trans_z") == 0) {
+        rpInfo->trans_z = field.value();
+    } else if (field.key().compare("quat_x") == 0) {
+        rpInfo->quat_x = field.value();
+    } else if (field.key().compare("quat_y") == 0) {
+        rpInfo->quat_y = field.value();
+    } else if (field.key().compare("quat_z") == 0) {
+        rpInfo->quat_z = field.value();
+    } else if (field.key().compare("quat_w") == 0) {
+        rpInfo->quat_w = field.value();
+    } else if (field.key().compare("tgt_state") == 0) {
+        rpInfo->tgt_state = field.value();
+    } else if (field.key().compare("role") == 0) {
+        rpInfo->hns_info.role = field.value();
+    } else if (field.key().compare("mp_state") == 0
+               && pNum != gMultiplayerInfo->player_num) { // only sync mp_state for remotes. for our own target, only goal code should be updating this
+        rpInfo->hns_info.mp_state = field.value();
+    } else if (field.key().compare("collected_by_pnum") == 0) {
+        rpInfo->hns_info.collected_by_pnum = field.value();
+    } else if (field.key().compare("rank") == 0) {
+        rpInfo->hns_info.rank = field.value();
+    } else if (field.key().compare("cam_trans_x") == 0) {
+        rpInfo->cam_trans_x = field.value();
+    } else if (field.key().compare("cam_trans_y") == 0) {
+        rpInfo->cam_trans_y = field.value();
+    } else if (field.key().compare("cam_trans_z") == 0) {
+        rpInfo->cam_trans_z = field.value();
+    } else if (field.key().compare("cam_trans_w") == 0) {
+        rpInfo->cam_trans_w = field.value();
+    }
+}
+
         }
       }
 

@@ -63,15 +63,23 @@ an orb |#
 0.0
 )
 
+
+
+
+
+(define *on-jetboard?* #f)
+
 (defun runs-every-frame ()
 
-(if (!= (get-jak-2-x) 0.0)
-(begin
-(set! (-> *target* root trans x) (get-jak-2-x))
-(set! (-> *target* root trans y) (get-jak-2-y))
-(set! (-> *target* root trans z) (get-jak-2-z))
-)
-)
+  (if (cpad-pressed? 0 r2)
+  (not! *on-jetboard?*)
+  )
+
+
+  (if *on-jetboard?*
+  (color-target-rgb *target* 10.0 10.0 10.0)
+  (color-target-rgb *target* 1.0 1.0 1.0)
+  )
   (let ((s5-0 (new-stack-vector0))
         (s4-0 (new-stack-vector0))
         )
@@ -79,6 +87,21 @@ an orb |#
         (set! (-> s5-0  y)(get-jak-2-y))
         (set! (-> s5-0  x)(get-jak-2-x))
         (set! (-> s5-0  z)(get-jak-2-z))
+
+;; Move jak to the location of jak 2 jak. This should be done if Jak 2 jak is less than 5 meters away and is on jetboard.
+;; If jak 2 Jak is more than 5 meters away and is on jetboard, move jak 2 jak to the location of jak 1 jak
+;; If we are on the jetboard, then we need to somehow sync up the cameras between the two games, hopefull we can just do this over python server with raw location values??
+
+
+(if (and (!= (get-jak-2-x) 0.0) #t);;(< (vector-vector-distance (target-pos 0) s5-0) (meters 5.0)) *on-jetboard?*)
+(begin
+(set! (-> *target* root trans x) (get-jak-2-x))
+(set! (-> *target* root trans y) (get-jak-2-y))
+(set! (-> *target* root trans z) (get-jak-2-z))
+)
+)
+
+
 (add-debug-sphere #t (bucket-id debug) s5-0 (meters 2.0) (static-rgba 0 #xff 0 #x40))
   )
 

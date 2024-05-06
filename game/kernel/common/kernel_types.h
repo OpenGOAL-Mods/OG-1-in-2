@@ -65,6 +65,10 @@ struct RemotePlayerInfo {
   float quat_w;
   s32 tgt_state;
   HnsPlayerInfo hns_info;
+  float cam_trans_x;
+  float cam_trans_y;
+  float cam_trans_z;
+  float cam_trans_w;
 };
 // static_assert(sizeof(RemotePlayerInfo) == 32, "RemotePlayerInfo size is wrong");
 

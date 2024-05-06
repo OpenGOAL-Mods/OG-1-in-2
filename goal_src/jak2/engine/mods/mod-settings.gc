@@ -231,7 +231,11 @@ if the result of rand-vu-int-range is 1, then DANCE! if it is not 1, then Don't 
   (quat_z     float)
   (quat_w     float)
   (tgt_state  symbol)
-  (hns_info   hns-player-info :inline)  ;; hide-n-seek specific info
+  (hns_info   hns-player-info :inline)
+  (cam_trans_x    float)
+  (cam_trans_y    float)
+  (cam_trans_z    float)
+  (cam_trans_w    float)  ;; hide-n-seek specific info
   )
   :pack-me
   (:methods
@@ -249,6 +253,10 @@ if the result of rand-vu-int-range is 1, then DANCE! if it is not 1, then Don't 
     (set! (-> obj trans_x) 0.0)
     (set! (-> obj trans_y) 0.0)
     (set! (-> obj trans_z) 0.0)
+    (set! (-> obj cam_trans_x) 0.0)
+    (set! (-> obj cam_trans_y) 0.0)
+    (set! (-> obj cam_trans_z) 0.0)
+    (set! (-> obj cam_trans_w) 0.0)
     (set! (-> obj quat_x) 0.0)
     (set! (-> obj quat_y) 0.0)
     (set! (-> obj quat_z) 0.0)

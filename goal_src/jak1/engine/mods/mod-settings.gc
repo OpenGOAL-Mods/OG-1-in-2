@@ -175,6 +175,7 @@
     )
   )
 
+
 (deftype remote-player-info (structure)
  ((username   string)
   (color      tgt-color)
@@ -187,7 +188,11 @@
   (quat_z     float)
   (quat_w     float)
   (tgt_state  symbol)
-  (hns_info   hns-player-info :inline)  ;; hide-n-seek specific info
+  (hns_info   hns-player-info :inline)
+  (cam_trans_x    float)
+  (cam_trans_y    float)
+  (cam_trans_z    float)
+  (cam_trans_w    float)  ;; hide-n-seek specific info
   )
   :pack-me
   (:methods
@@ -205,6 +210,10 @@
     (set! (-> obj trans_x) 0.0)
     (set! (-> obj trans_y) 0.0)
     (set! (-> obj trans_z) 0.0)
+    (set! (-> obj cam_trans_x) 0.0)
+    (set! (-> obj cam_trans_y) 0.0)
+    (set! (-> obj cam_trans_z) 0.0)
+    (set! (-> obj cam_trans_w) 0.0)
     (set! (-> obj quat_x) 0.0)
     (set! (-> obj quat_y) 0.0)
     (set! (-> obj quat_z) 0.0)
