@@ -1,0 +1,29 @@
+
+
+
+Things we need
+
+X value of camera trans
+y value of camera trans
+z value of camera trans
+
+assume first value is always 9,
+
+then we need camera-rot-1
+then we need camera-rot-2
+then we need camera-rot-3
+then we need camera-rot-4
+then we need camera-rot-5
+then we need camera-rot-6
+then we need camera-rot-7
+then we need camera-rot-8
+then we need camera-rot-9
+
+
+
+(trsq->continue-point (-> *target* control))
+
+
+
+:camera-trans (new 'static 'vector :x -1503602.2 :y 62047.027 :z 2475579.5 :w 1.0)
+      :camera-rot (new 'static 'array float 9 0.689 0.0 0.7247 -0.3328 0.8882 0.3164 -0.6437 -0.4592 0.612)

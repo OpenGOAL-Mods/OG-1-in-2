@@ -608,6 +608,183 @@
 0.0
 )
 
+(defun get-jak-1-cam-rot-1 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_1))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-rot-2 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_2))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-rot-3 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_3))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-rot-4 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_4))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-rot-5 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_5))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-rot-6 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_6))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-rot-7 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_7))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-rot-8 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_8))
+)
+)
+0.0
+)
+
+(defun get-jak-1-cam-rot-9 ()
+
+(dotimes (i MAX_MULTIPLAYER_COUNT)
+
+(if (= (-> *multiplayer-info* players i hns_info rank) 1)
+(return (-> *multiplayer-info* players i cam_rot_9))
+)
+)
+0.0
+)
+
+
+
+
+
+
+(deftype burning-bush-get-on-info-test (structure)
+  ((trans         vector      :inline)
+   (quat          quaternion  :inline)
+   (camera-trans  vector      :inline)
+   (camera-rot    float       9)
+   (time          float)
+   )
+  )
+
+
+(define *burning-bush-get-on-info-test*
+  (new 'static 'boxed-array :type burning-bush-get-on-info-test
+    (new 'static 'burning-bush-get-on-info-test
+      :trans (new 'static 'vector :x -1530670.2 :y 32765.543 :z 2502434.0 :w 1.0)
+      :quat (new 'static 'quaternion :y -0.6321 :w 0.7748)
+      :camera-trans (new 'static 'vector :x -1503602.2 :y 62047.027 :z 2475579.5 :w 1.0)
+      :camera-rot (new 'static 'array float 9 0.689 0.0 0.7247 -0.3328 0.8882 0.3164 -0.6437 -0.4592 0.612)
+      :time 6000.0
+      )
+
+  ))
+
+(defun update-cam-trans-stuff ()
+
+(set! (-> *vector-LOL* y)(get-jak-1-cam-trans-y))
+(set! (-> *vector-LOL* x)(get-jak-1-cam-trans-x))
+(set! (-> *vector-LOL*  z)(get-jak-1-cam-trans-z))
+
+(vector-copy! (-> (-> *burning-bush-get-on-info-test* 0) camera-trans)  *vector-LOL*)
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 0) (get-jak-1-cam-rot-1) )
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 1) (get-jak-1-cam-rot-2) )
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 2) (get-jak-1-cam-rot-3) )
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 3) (get-jak-1-cam-rot-4) )
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 4) (get-jak-1-cam-rot-5) )
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 5) (get-jak-1-cam-rot-6) )
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 6) (get-jak-1-cam-rot-7) )
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 7) (get-jak-1-cam-rot-8) )
+(set!(-> (-> *burning-bush-get-on-info-test* 0) camera-rot 8) (get-jak-1-cam-rot-9) )
+(none)
+)
+
+(defun move-camera-test ()
+
+    (let ((gp-0 (new 'stack 'transformq)))
+      (let ((v1-45 (-> *burning-bush-get-on-info-test* 0));;(-> self info index)))
+            (a1-16 (new 'stack-no-clear 'matrix))
+            )
+        (set! (-> gp-0 trans quad) (-> v1-45 camera-trans quad))
+        (set-vector! (-> gp-0 scale) 1.0 1.0 1.0 1.0)
+        (set! (-> a1-16 vector 0 x) (-> v1-45 camera-rot 0))
+        (set! (-> a1-16 vector 0 y) (-> v1-45 camera-rot 1))
+        (set! (-> a1-16 vector 0 z) (-> v1-45 camera-rot 2))
+        (set! (-> a1-16 vector 0 w) 0.0)
+        (set! (-> a1-16 vector 1 x) (-> v1-45 camera-rot 3))
+        (set! (-> a1-16 vector 1 y) (-> v1-45 camera-rot 4))
+        (set! (-> a1-16 vector 1 z) (-> v1-45 camera-rot 5))
+        (set! (-> a1-16 vector 1 w) 0.0)
+        (set! (-> a1-16 vector 2 x) (-> v1-45 camera-rot 6))
+        (set! (-> a1-16 vector 2 y) (-> v1-45 camera-rot 7))
+        (set! (-> a1-16 vector 2 z) (-> v1-45 camera-rot 8))
+        (set! (-> a1-16 vector 2 w) 0.0)
+        (set! (-> a1-16 trans x) 0.0)
+        (set! (-> a1-16 trans y) 0.0)
+        (set! (-> a1-16 trans z) 0.0)
+        (set! (-> a1-16 trans w) 1.0)
+        (matrix->quaternion (-> gp-0 quat) a1-16)
+        )
+      (send-event *camera* 'teleport-to-transformq gp-0)
+      ;;'teleport-to-transformq
+      )
+
+
+(none))
 
 (defun stupid ()
 
@@ -676,7 +853,7 @@
   ;; if never synced positions, or its been X ms, request updated positions
     (when (and (>= (-> *multiplayer-info* player_num) 0)
                (or (not *last-position-sync-time*)
-                   (>= (- (current-time) *last-position-sync-time*) (seconds 0.05))
+                   (>= (- (current-time) *last-position-sync-time*) (seconds 0.0005))
                    )
                )
       ;; update last sync time
@@ -690,6 +867,18 @@
       (if (= (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-invalid))
         (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) hns_info mp_state) (mp-tgt-state mp-tgt-lobby))
         )
+
+      (when no-board?
+        (send-event *target* 'get-pickup (pickup-type board) 100.0)
+        (set! no-board? #f)
+      )
+
+  (when (and (!= *target* #f) (!= (-> (level-get-target-inside *level*) name) 'title) )
+        (update-cam-trans-stuff)
+        (move-camera-test)
+       ;;(stupid)
+       (none)
+       )
 
       ;; send updated player info to server
       (pc-http-update)
@@ -738,16 +927,7 @@
       ;;     )
       ;;   )
 
-      (when no-board?
-        (send-event *target* 'get-pickup (pickup-type board) 100.0)
-        (set! no-board? #f)
-      )
 
-  (when (and (!= *target* #f) (!= (-> (level-get-target-inside *level*) name) 'title) )
-
-       (stupid)
-       (none)
-       )
 
 
       (when (and (cpad-pressed? 0 down) (= *master-mode* 'game))

@@ -226,6 +226,16 @@ void http_update() {
       {"cam_trans_y", rpInfo->cam_trans_y},
       {"cam_trans_z", rpInfo->cam_trans_z},
       {"cam_trans_w", rpInfo->cam_trans_w},
+    {"cam_rot_1", rpInfo->cam_rot_1},
+    {"cam_rot_2", rpInfo->cam_rot_2},
+    {"cam_rot_3", rpInfo->cam_rot_3},
+    {"cam_rot_4", rpInfo->cam_rot_4},
+    {"cam_rot_5", rpInfo->cam_rot_5},
+    {"cam_rot_6", rpInfo->cam_rot_6},
+    {"cam_rot_7", rpInfo->cam_rot_7},
+    {"cam_rot_8", rpInfo->cam_rot_8},
+    {"cam_rot_9", rpInfo->cam_rot_9},
+
       // role intentionally left out, only updated from server side
       // collected_by_pnum intentionally left out, only updated from server side
       // rank intentionally left out, only updated from server side
@@ -323,6 +333,32 @@ for (const auto& field : item.value().items()) {
         rpInfo->cam_trans_z = field.value();
     } else if (field.key().compare("cam_trans_w") == 0) {
         rpInfo->cam_trans_w = field.value();
+    } else if (field.key().compare("cam_rot_1") == 0) {
+        rpInfo->cam_rot_1 = field.value();
+    }
+    else if (field.key().compare("cam_rot_2") == 0) {
+        rpInfo->cam_rot_2 = field.value();
+    }
+    else if (field.key().compare("cam_rot_3") == 0) {
+        rpInfo->cam_rot_3 = field.value();
+    }
+    else if (field.key().compare("cam_rot_4") == 0) {
+        rpInfo->cam_rot_4 = field.value();
+    }
+    else if (field.key().compare("cam_rot_5") == 0) {
+        rpInfo->cam_rot_5 = field.value();
+    }
+    else if (field.key().compare("cam_rot_6") == 0) {
+        rpInfo->cam_rot_6 = field.value();
+    }
+    else if (field.key().compare("cam_rot_7") == 0) {
+        rpInfo->cam_rot_7 = field.value();
+    }
+    else if (field.key().compare("cam_rot_8") == 0) {
+        rpInfo->cam_rot_8 = field.value();
+    }
+    else if (field.key().compare("cam_rot_9") == 0) {
+        rpInfo->cam_rot_9 = field.value();
     }
 }
 

@@ -903,22 +903,22 @@
     (format
       #t
       "                       (camera ~m ~m ~m ~f ~f ~f "
-      (-> gp-1 trans x)
-      (-> gp-1 trans y)
-      (-> gp-1 trans z)
+      (-> *math-camera* trans x)
+      (-> *math-camera* trans y)
+      (-> *math-camera* trans z)
       (-> *math-camera* inv-camera-rot vector 0 x)
-      (-> gp-1 inv-camera-rot vector 0 y)
-      (-> gp-1 inv-camera-rot vector 0 z)
+      (-> *math-camera* inv-camera-rot vector 0 y)
+      (-> *math-camera* inv-camera-rot vector 0 z)
       )
     (format
       #t
       "~f ~f ~f ~f ~f ~f)~%"
-      (-> gp-1 inv-camera-rot vector 1 x)
-      (-> gp-1 inv-camera-rot vector 1 y)
-      (-> gp-1 inv-camera-rot vector 1 z)
-      (-> gp-1 inv-camera-rot vector 2 x)
-      (-> gp-1 inv-camera-rot vector 2 y)
-      (-> gp-1 inv-camera-rot vector 2 z)
+      (-> *math-camera* inv-camera-rot vector 1 x)
+      (-> *math-camera* inv-camera-rot vector 1 y)
+      (-> *math-camera* inv-camera-rot vector 1 z)
+      (-> *math-camera* inv-camera-rot vector 2 x)
+      (-> *math-camera* inv-camera-rot vector 2 y)
+      (-> *math-camera* inv-camera-rot vector 2 z)
       )
     )
   (format

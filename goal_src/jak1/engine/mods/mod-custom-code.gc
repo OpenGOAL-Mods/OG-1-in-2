@@ -123,7 +123,7 @@ an orb |#
   ;; if never synced positions, or its been X ms, request updated positions
     (when (and (>= (-> *multiplayer-info* player_num) 0)
                (or (not *last-position-sync-time*)
-                   (>= (- (-> *display* base-frame-counter) *last-position-sync-time*) (seconds 0.05))
+                   (>= (- (-> *display* base-frame-counter) *last-position-sync-time*) (seconds 0.0005))
                    )
                )
       ;; update last sync time

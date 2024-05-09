@@ -192,7 +192,16 @@
   (cam_trans_x    float)
   (cam_trans_y    float)
   (cam_trans_z    float)
-  (cam_trans_w    float)  ;; hide-n-seek specific info
+  (cam_trans_w    float)
+   (cam_rot_1  float)
+  (cam_rot_2  float)
+  (cam_rot_3  float)
+  (cam_rot_4  float)
+  (cam_rot_5  float)
+  (cam_rot_6  float)
+  (cam_rot_7  float)
+  (cam_rot_8  float)
+  (cam_rot_9  float) ;; hide-n-seek specific info
   )
   :pack-me
   (:methods
@@ -219,6 +228,15 @@
     (set! (-> obj quat_z) 0.0)
     (set! (-> obj quat_w) 0.0)
     (set! (-> obj tgt_state) 'invalid)
+    (set! (-> obj cam_rot_1) 0.0)
+    (set! (-> obj cam_rot_2) 0.0)
+    (set! (-> obj cam_rot_3) 0.0)
+    (set! (-> obj cam_rot_4) 0.0)
+    (set! (-> obj cam_rot_5) 0.0)
+    (set! (-> obj cam_rot_6) 0.0)
+    (set! (-> obj cam_rot_7) 0.0)
+    (set! (-> obj cam_rot_8) 0.0)
+    (set! (-> obj cam_rot_9) 0.0)
     obj
     )
   )

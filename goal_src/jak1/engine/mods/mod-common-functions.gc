@@ -212,10 +212,34 @@ if the result of rand-vu-int-range is 1, then DANCE! if it is not 1, then Don't 
   (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_trans_y)  (-> (the-as camera-slave (-> *camera* child 0)) trans y))
   (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_trans_z)  (-> (the-as camera-slave (-> *camera* child 0)) trans z))
   (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_trans_w)  (-> (the-as camera-slave (-> *camera* child 0)) trans w))
+
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_1)   (-> *math-camera* inv-camera-rot vector 0 x))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_2)   (-> *math-camera* inv-camera-rot vector 0 y))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_3)   (-> *math-camera* inv-camera-rot vector 0 z))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_4)   (-> *math-camera* inv-camera-rot vector 1 x))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_5)   (-> *math-camera* inv-camera-rot vector 1 y))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_6)   (-> *math-camera* inv-camera-rot vector 1 z))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_7)   (-> *math-camera* inv-camera-rot vector 2 x))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_8)   (-> *math-camera* inv-camera-rot vector 2 y))
+  (set! (-> *multiplayer-info* players (-> *multiplayer-info* player_num) cam_rot_9)   (-> *math-camera* inv-camera-rot vector 2 z))
   (none)
   )
 
-
+#|
+  (-> *math-camera* inv-camera-rot vector 0 x)
+      (-> *math-camera* inv-camera-rot vector 0 y)
+      (-> *math-camera* inv-camera-rot vector 0 z)
+      )
+    (format
+      #t
+      "~f ~f ~f ~f ~f ~f)~%"
+      (-> *math-camera* inv-camera-rot vector 1 x)
+      (-> *math-camera* inv-camera-rot vector 1 y)
+      (-> *math-camera* inv-camera-rot vector 1 z)
+      (-> *math-camera* inv-camera-rot vector 2 x)
+      (-> *math-camera* inv-camera-rot vector 2 y)
+      (-> *math-camera* inv-camera-rot vector 2 z)
+|#
 
 (defun color-target-rgb ((tgt process-drawable) (r float) (g float) (b float))
   (set! (-> tgt draw color-mult r) r)

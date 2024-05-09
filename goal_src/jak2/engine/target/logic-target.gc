@@ -3055,7 +3055,7 @@
   (set! (-> this color-effect) #f)
   (set-setting! 'allow-pause #f 0.0 0)
   (set-setting! 'allow-progress #f 0.0 0)
-  (set! (-> *setting-control* cam-default mode-name) 'cam-free-floating)
+  (set! (-> *setting-control* cam-default mode-name) 'cam-fixed)
   (apply-settings *setting-control*)
   (if (not arg0)
       (set! arg0 (get-current-continue-forced *game-info*))
